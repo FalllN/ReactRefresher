@@ -1,18 +1,33 @@
+import { useState } from 'react';
+import ticketsData from './data/tickets';
+import Header from './components/Header';
+import TicketCard from './components/TicketCard';
+import StatusFilter from './components/StatusFilter';
+
 function App() {
+  const [tickets] = useState(ticketsData);
+  const [filterStatus, setFilterStatus] = useState('All');
+
+  const filteredTickets =
+    filterStatus === 'All'
+      ? tickets
+      : tickets.filter((ticket) => ticket.status === filterStatus);
+
   return (
     <main className="mx-auto max-w-3xl px-5 py-8">
-      <h1 className="mb-3 text-3xl font-semibold tracking-tight text-slate-900">
-        React Fundamentals Assessment
-      </h1>
-      <p className="mb-4 text-slate-600">
-        Build a Support Ticket Dashboard using this starter project. Read the
-        README for requirements, then implement the features step by step.
-      </p>
-      <p className="border-l-4 border-blue-600 bg-blue-50 px-4 py-3 text-blue-900">
-        Start by adding ticket data and a reusable TicketCard component. Do not
-        try to finish everything in one large change. Use Tailwind utility
-        classes for styling.
-      </p>
+      <Header />
+
+      <StatusFilter currentFilter={filterStatus} onFilterChange={setFilterStatus} />
+
+      <div className="grid gap-4">
+        {filteredTickets.length > 0 ? (
+          filteredTickets.map((ticket) => <TicketCard key={ticket.id} ticket={ticket} />)
+        ) : (
+          <p className="py-10 text-center text-slate-500">
+            No tickets found with status "{filterStatus}".
+          </p>
+        )}
+      </div>
     </main>
   );
 }
