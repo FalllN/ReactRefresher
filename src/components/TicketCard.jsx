@@ -1,4 +1,4 @@
-const TicketCard = ({ ticket }) => {
+const TicketCard = ({ ticket, onAdvanceStatus }) => {
   const { id, customer, subject, status, priority } = ticket;
 
   const statusColors = {
@@ -27,11 +27,21 @@ const TicketCard = ({ ticket }) => {
       </div>
       <h3 className="mb-1 text-lg font-semibold text-slate-900">{subject}</h3>
       <p className="mb-4 text-slate-600">{customer}</p>
-      <div className="flex items-center text-sm">
-        <span className="mr-2 font-medium text-slate-500">Priority:</span>
-        <span className={`font-semibold ${priorityColors[priority] || 'text-slate-700'}`}>
-          {priority}
-        </span>
+      <div className="flex items-center justify-between text-sm">
+        <div className="flex items-center">
+          <span className="mr-2 font-medium text-slate-500">Priority:</span>
+          <div className={`font-semibold ${priorityColors[priority] || 'text-slate-700'}`}>
+            {priority}
+          </div>
+        </div>
+        {status !== 'Closed' && (
+          <button
+            onClick={() => onAdvanceStatus(id)}
+            className="rounded-md bg-slate-100 px-3 py-1.5 font-medium text-slate-700 transition-colors hover:bg-slate-200"
+          >
+            {status === 'Open' ? 'Start Work' : 'Close Ticket'}
+          </button>
+        )}
       </div>
     </div>
   );
