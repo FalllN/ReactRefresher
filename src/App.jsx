@@ -4,6 +4,7 @@ import Header from './components/Header';
 import TicketCard from './components/TicketCard';
 import StatusFilter from './components/StatusFilter';
 import SearchBar from './components/SearchBar';
+import TicketForm from './components/TicketForm';
 
 function App() {
   const [tickets, setTickets] = useState(ticketsData);
@@ -27,7 +28,24 @@ function App() {
     );
   };
 
-  const filteredTickets = tickets.filter((ticket) => { //results get filtered regardless essentially cant do an if else
+  const handleAddTicket = (newTicketData) => {
+    setTickets((prevTickets) => { //update state passing a function
+      const nextIdNumber =
+        prevTickets.length > 0
+          ? Math.max(...prevTickets.map((t) => parseInt(t.id.split('-')[1]))) + 1 //Takes string, converts to number, sets created ticket as new max
+          : 1001; //if no tickets, start at 1001 which is first ticket id
+
+      const newTicket = { //creates a new ticket using newTicketData
+        ...newTicketData,
+        id: `T-${nextIdNumber}`,
+        status: 'Open',
+      };
+
+      return [...prevTickets, newTicket];
+    });
+  };
+
+  const filteredTickets = tickets.filter((ticket) => {
       const checkStatus =
           filterStatus === 'All' || ticket.status === filterStatus;
 
@@ -38,7 +56,8 @@ function App() {
   return (
     <main className="mx-auto max-w-3xl px-5 py-8">
       <Header />
-        <SearchBar value={searchTerm} onChange={setSearchTerm} />
+      <TicketForm onAddTicket={handleAddTicket} />
+      <SearchBar value={searchTerm} onChange={setSearchTerm} />
       <StatusFilter currentFilter={filterStatus} onFilterChange={setFilterStatus} />
 
       <div className="grid gap-4">
