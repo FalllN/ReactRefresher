@@ -5,6 +5,7 @@ import TicketCard from './components/TicketCard';
 import StatusFilter from './components/StatusFilter';
 import SearchBar from './components/SearchBar';
 import TicketForm from './components/TicketForm';
+import TicketSummary from './components/TicketSummary';
 
 function App() {
   const [tickets, setTickets] = useState(ticketsData);
@@ -56,6 +57,7 @@ function App() {
   return (
     <main className="mx-auto max-w-3xl px-5 py-8">
       <Header />
+      <TicketSummary tickets={tickets} />
       <TicketForm onAddTicket={handleAddTicket} />
       <SearchBar value={searchTerm} onChange={setSearchTerm} />
       <StatusFilter currentFilter={filterStatus} onFilterChange={setFilterStatus} />
@@ -71,7 +73,7 @@ function App() {
           ))
         ) : (
           <p className="py-10 text-center text-slate-500">
-            No tickets found with status "{filterStatus}" and search term "{searchTerm}".
+            No tickets match your current filters.
           </p>
         )}
       </div>
